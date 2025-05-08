@@ -10,9 +10,9 @@ error FundMe__NotEnoughEth();
 error FundMe__CallFailed();
 contract FundMe {
     using PriceConverter for uint256;
-    mapping(address => uint256) public addressToAmount;
-    address[] public funders;
-    address public immutable i_owner;
+    mapping(address => uint256) private s_addressToAmount;
+    address[] private s_funders;
+    address private immutable i_owner;
     uint256 public constant MINIMUM_USD = 5e18;
     AggregatorV3Interface public immutable i_priceFeed;
 
@@ -23,8 +23,8 @@ contract FundMe {
 
     function fund() public payable {
         if(msg.value.getConversionRate(i_priceFeed)<MINIMUM_USD) revert FundMe__NotEnoughEth();
-        addressToAmount[msg.sender] += msg.value;
-            funders.push(msg.sender);
+        s_addressToAmount[msg.sender] += msg.value;
+            s_funders.push(msg.sender);
         
     }
     modifier OnlyOwner {
@@ -37,10 +37,11 @@ contract FundMe {
     }
 
     function withdraw() public OnlyOwner {
-        for(uint256 i=0; i<funders.length; i++){
-            addressToAmount[funders[i]] = 0;
+        uint256 fundersLength = s_funders.length;
+        for(uint256 i=0; i<fundersLength; i++){
+            s_addressToAmount[s_funders[i]] = 0;
         }
-        funders = new address[](0);
+        s_funders = new address[](0);
 
         (bool success,) = payable(msg.sender).call{value: address(this).balance}("");
         if(!success) revert FundMe__CallFailed();
@@ -52,6 +53,16 @@ contract FundMe {
 
     receive() external payable {
         fund();
+    }
+    function getFundedAmount(address funder) external view returns (uint256) {
+        return s_addressToAmount[funder];
+    }
+    function getFunder(uint256 index) external view returns (address) {
+        return s_funders[index];
+    }
+
+    function getOwner() external view returns(address) {
+        return i_owner;
     }
 }
 
