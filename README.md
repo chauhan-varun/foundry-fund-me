@@ -21,7 +21,7 @@ A decentralized crowdfunding platform built with Solidity and Foundry. This proj
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/chauhan-varun/foundry-fund-me
 cd fondry-fund-me
 ```
 
