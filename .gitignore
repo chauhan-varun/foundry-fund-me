@@ -15,4 +15,4 @@ docs/
 .DS_Store
 zkout/
 broadcast/
-lib/
+# lib/

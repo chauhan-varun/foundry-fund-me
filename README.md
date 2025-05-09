@@ -1,66 +1,103 @@
-## Foundry
+# FundMe Smart Contract
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+A decentralized crowdfunding platform built with Solidity and Foundry. This project allows users to fund the contract with ETH, with a minimum USD value requirement, and enables the contract owner to withdraw the funds.
 
-Foundry consists of:
+## Features
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+- Accept ETH donations with a minimum USD value requirement (5 USD)
+- Chainlink Price Feed integration for real-time ETH/USD conversion
+- Owner-only withdrawal functionality
+- Track funders and their contribution amounts
+- Fallback and receive functions for direct ETH transfers
 
-## Documentation
+## Prerequisites
 
-https://book.getfoundry.sh/
+- [Foundry](https://book.getfoundry.sh/getting-started/installation)
+- [Node.js](https://nodejs.org/) (for development)
+- An Ethereum wallet with testnet ETH
+
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone <repository-url>
+cd fondry-fund-me
+```
+
+2. Install dependencies:
+
+```bash
+forge install Cyfrin/foundry-devops
+forge install foundry-rs/forge-std
+forge install smartcontractkit/chainlink-brownie-contracts
+```
 
 ## Usage
 
 ### Build
 
-```shell
-$ forge build
+```bash
+forge build
 ```
 
 ### Test
 
-```shell
-$ forge test
+```bash
+forge test
 ```
 
 ### Format
 
-```shell
-$ forge fmt
+```bash
+forge fmt
 ```
 
 ### Gas Snapshots
 
-```shell
-$ forge snapshot
+```bash
+forge snapshot
 ```
 
-### Anvil
+### Local Development
 
-```shell
-$ anvil
+Start a local Ethereum node:
+
+```bash
+anvil
 ```
 
 ### Deploy
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+```bash
+forge script script/DeployFundMe.s.sol:DeployFundMe --rpc-url <your_rpc_url> --private-key <your_private_key>
 ```
 
-### Cast
+### Interact with Contract
 
-```shell
-$ cast <subcommand>
+Use Cast to interact with the deployed contract:
+
+```bash
+cast <subcommand>
 ```
 
-### Help
+## Contract Functions
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+- `fund()`: Send ETH to the contract (minimum 5 USD worth)
+- `withdraw()`: Owner can withdraw all funds
+- `getFundedAmount(address)`: Get amount funded by a specific address
+- `getFunder(uint256)`: Get funder address at specific index
+- `getOwner()`: Get contract owner address
+- `getVersion()`: Get Chainlink Price Feed version
+
+## Foundry Documentation
+
+For more information about Foundry, visit: https://book.getfoundry.sh/
+
+### Help Commands
+
+```bash
+forge --help
+anvil --help
+cast --help
 ```
